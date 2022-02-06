@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  db:
+    platform: linux/x86_64
+    image: mysql
+    container_name: localSql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=StrongPassword
+      # create new user, password and database
+      - MYSQL_USER=UserName
+      - MYSQL_PASSWORD=StrongPassword
+      - MYSQL_DATABASE=ToDoListDB
+    volumes:
+      - ./mysql/data:/var/lib/mysql/
+    ports:
+      - "3306:3306"
+  web:
+    build: .
+    container_name: todolist-web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
