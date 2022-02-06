@@ -26,6 +26,14 @@ http://127.0.0.1:8000/api/docs/
 ```
 this link will only be available after running docker
 
+##for admin portal use:
+```
+http://127.0.0.1:8000/admin/
+
+using username: test@mail.com
+      password: 12345678
+```
+
 ###Note:
 
 If .env file does not exist, the default values will be used
