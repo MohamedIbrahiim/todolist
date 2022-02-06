@@ -24,7 +24,7 @@ class ToDoListApi(
     queryset = Todo.objects.all()
     serializer_class = ToDoListSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["is_finished", "due_date"]
+    filterset_fields = ["is_finished"]
 
     def get_object(self):
         return get_object_or_404(Todo, id=self.kwargs.get("pk"), is_finished=False)

@@ -1,6 +1,7 @@
 """
 Admin view which will represent admin actions and ui
 """
+from django.contrib.auth.models import User
 from django.db.models import Q, F, QuerySet
 from django.utils import timezone
 from django.contrib import admin
@@ -47,6 +48,10 @@ class ToDoAdmin(admin.ModelAdmin):
     list_display = ["description", "creator", "end_user", "is_finished"]
     list_filter = [TaskStatusFilter]
     fieldsets = ((None, {"fields": ("end_user", "description", "due_date")}),)
+
+    def render_change_form(self, request, context, *args, **kwargs):
+        context['adminform'].form.fields['end_user'].queryset = User.objects.filter(is_staff=False)
+        return super().render_change_form(request, context, *args, **kwargs)
 
     def save_model(self, request, obj, form, change) -> None:
         obj.creator = request.user
