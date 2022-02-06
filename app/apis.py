@@ -2,17 +2,15 @@
 Api file which will represent all apis for todo from mobile devices
 """
 from django.db.models import QuerySet
-from rest_framework.generics import ListAPIView, UpdateAPIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import GenericViewSet
+from rest_framework import generics, permissions, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from .models import Todo
-from .serilaizers import ToDoListSerializer
+from .serilaizers import ToDoListSerializer, RegisterUserSerializer
 
 
 class ToDoListApi(
-    GenericViewSet, ListAPIView, UpdateAPIView
+    viewsets.GenericViewSet, generics.ListAPIView, generics.UpdateAPIView
 ):  # pylint: disable=too-many-ancestors
     """
     api will do listing and updating end-user todo list
@@ -22,7 +20,7 @@ class ToDoListApi(
     api ex : PATCH/PUT => host:port/api/mobile/v1/todo/ with {} as body
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Todo.objects.all()
     serializer_class = ToDoListSerializer
     filter_backends = [DjangoFilterBackend]
@@ -33,3 +31,8 @@ class ToDoListApi(
 
     def get_queryset(self) -> QuerySet:
         return Todo.objects.filter(end_user=self.request.user).order_by("-id")
+
+
+class RegisterApi(generics.CreateAPIView):
+    permission_classes = []
+    serializer_class = RegisterUserSerializer

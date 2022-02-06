@@ -13,12 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from .apis import ToDoListApi
+from django.urls import path
+from .apis import ToDoListApi, RegisterApi
 from rest_framework import routers
 
-app_name = "todo-mobile"
+app_name = "mobile"
 
 router = routers.SimpleRouter()
 router.register("todo", ToDoListApi, basename="todo")
-urlpatterns = []
+urlpatterns = [path("register/", RegisterApi.as_view(), name="register")]
 urlpatterns += router.urls
