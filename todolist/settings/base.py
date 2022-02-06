@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,7 +11,7 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = bool(int(os.environ.get("DEBUG", default=1)))
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(" ")
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -21,6 +22,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # 3rd party
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "drf_spectacular",
+    "corsheaders",
+    "django_filters",
     # apps
     "app",
 ]
@@ -28,6 +35,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -59,7 +67,7 @@ WSGI_APPLICATION = "todolist.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": os.environ.get("MYSQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("MYSQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "NAME": os.environ.get("MYSQL_DATABASE", BASE_DIR / "../db.sqlite3"),
         "USER": os.environ.get("MYSQL_USER", "user"),
         "PASSWORD": os.environ.get("MYSQL_PASSWORD", "password"),
         "HOST": os.environ.get("MYSQL_HOST", "localhost"),
@@ -109,3 +117,24 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# JWT config
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=43200),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=100),
+    "UPDATE_LAST_LOGIN": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 10,
+}
