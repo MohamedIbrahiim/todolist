@@ -21,7 +21,5 @@ app_name = "mobile"
 
 router = routers.SimpleRouter()
 router.register("todo", ToDoListApi, basename="todo")
-urlpatterns = [
-    path("register/", RegisterApi.as_view(), name="register")
-]
+urlpatterns = [path("register/", RegisterApi.as_view(), name="register")]
 urlpatterns += router.urls

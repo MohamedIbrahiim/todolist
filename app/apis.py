@@ -2,7 +2,7 @@
 Api file which will represent all apis for todo from mobile devices
 """
 from django.db.models import QuerySet
-from rest_framework import (generics, permissions, viewsets)
+from rest_framework import generics, permissions, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from .models import Todo
