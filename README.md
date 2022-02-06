@@ -24,7 +24,9 @@ To view API documentation swagger interface can be used:
 ```sh
 http://127.0.0.1:8000/api/docs/
 ```
-####Note:
+this link will only be available after running docker
+
+###Note:
 
 If .env file does not exist, the default values will be used
 which will lead to the use of sqlite instead of MySql
